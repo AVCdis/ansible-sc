@@ -39,18 +39,20 @@
 	# defaults file for lamp
 
 # File marks:
-'0  8  11  ~/app.yml
-'1  5  0  ~/roles/webapp/tasks/main.yml
-'2  8  0  ~/roles/webapp/tasks/site.yml
-'3  15  0  ~/roles/webapp/templates/apache.conf
-'4  7  0  ~/roles/webapp/tasks/app.yml
-'5  5  0  ~/roles/webapp/tasks/database.yml
-'6  6  0  ~/roles/webapp/defaults/main.yml
-'7  22  0  ~/roles/lamp/tasks/main.yml
-'8  6  0  ~/roles/lamp/handlers/main.yml
-'9  10  0  ~/roles/lamp/defaults/main.yml
+'0  9  12  ~/.gitignore
+'1  8  11  ~/app.yml
+'2  5  0  ~/roles/webapp/tasks/main.yml
+'3  8  0  ~/roles/webapp/tasks/site.yml
+'4  15  0  ~/roles/webapp/templates/apache.conf
+'5  7  0  ~/roles/webapp/tasks/app.yml
+'6  5  0  ~/roles/webapp/tasks/database.yml
+'7  6  0  ~/roles/webapp/defaults/main.yml
+'8  22  0  ~/roles/lamp/tasks/main.yml
+'9  6  0  ~/roles/lamp/handlers/main.yml
 
 # Jumplist (newest first):
+-'  9  12  ~/.gitignore
+-'  1  0  ~/.gitignore
 -'  8  11  ~/app.yml
 -'  1  0  ~/app.yml
 -'  5  0  ~/roles/webapp/tasks/main.yml
@@ -100,8 +102,62 @@
 -'  28  0  ~/roles/lamp/tasks/main.yml
 -'  10  0  ~/roles/lamp/defaults/main.yml
 -'  1  0  ~/roles/lamp/defaults/main.yml
+-'  8  11  ~/app.yml
+-'  1  0  ~/app.yml
+-'  5  0  ~/roles/webapp/tasks/main.yml
+-'  1  0  ~/roles/webapp/tasks/main.yml
+-'  8  0  ~/roles/webapp/tasks/site.yml
+-'  1  0  ~/roles/webapp/tasks/site.yml
+-'  15  0  ~/roles/webapp/templates/apache.conf
+-'  1  0  ~/roles/webapp/templates/apache.conf
+-'  7  0  ~/roles/webapp/tasks/app.yml
+-'  1  0  ~/roles/webapp/tasks/app.yml
+-'  5  0  ~/roles/webapp/tasks/database.yml
+-'  1  0  ~/roles/webapp/tasks/database.yml
+-'  6  0  ~/roles/webapp/defaults/main.yml
+-'  1  0  ~/roles/webapp/defaults/main.yml
+-'  22  0  ~/roles/lamp/tasks/main.yml
+-'  1  0  ~/roles/lamp/tasks/main.yml
+-'  6  0  ~/roles/lamp/handlers/main.yml
+-'  1  0  ~/roles/lamp/handlers/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  6  2  ~/app.yml
+-'  9  0  ~/app.yml
+-'  29  0  ~/roles/lamp/tasks/main.yml
+-'  19  0  ~/app.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  6  0  ~/roles/lamp/handlers/main.yml
+-'  1  0  ~/roles/lamp/handlers/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  28  0  ~/roles/lamp/tasks/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  22  0  ~/roles/lamp/tasks/main.yml
+-'  1  0  ~/roles/lamp/tasks/main.yml
+-'  6  0  ~/roles/lamp/handlers/main.yml
+-'  1  0  ~/roles/lamp/handlers/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  29  0  ~/roles/lamp/tasks/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
+-'  6  0  ~/roles/lamp/handlers/main.yml
+-'  1  0  ~/roles/lamp/handlers/main.yml
+-'  10  0  ~/roles/lamp/defaults/main.yml
+-'  1  0  ~/roles/lamp/defaults/main.yml
 
 # History of marks within files (newest to oldest):
+
+> ~/.gitignore
+	"	9	12
+	^	9	13
+	.	9	12
+	+	1	6
+	+	8	2
+	+	9	12
 
 > ~/app.yml
 	"	8	11
