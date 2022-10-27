@@ -1,0 +1,120 @@
+- name: Install aptitude using apt
+  ansible.builtin.apt:
+    name: aptitude
+    state: present
+    update_cache: true
+
+- name: Install required system packages for Docker
+  ansible.builtin.apt:
+    pkg:
+    name: "{{ docker_required_packages }}"
+    state: present
+    update_cache: true
+
+- name: Add Docker GPG apt key
+  ansible.builtin.apt_key:
+    url: "{{ docker_gpg_url }}"
+    # url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    state: present
+
+- name: Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: "{{ docker_repo }}"
+    # repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: "{{ docker_packges }}"
+    state: present
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Add adminstrator to docker group
+  ansible.builtin.user:
+    name: "{{ admin_user }}"
+    groups: docker
+    append: true
+
+- name: Install Docker Compose
+  ansible.builtin.get_url:
+    url: "{{ docker_compose_url }}"
+    dest: /usr/local/bin/docker-compose
+    mode: u+x,g+x,o+x
+
+# - name: Check that Docker was started and enabled
+#   service:
+#     name: docker
+#     state: started
+#     enabled: yes
+
+# Test docker installation
+
+- name: Pull default Docker image
+  community.docker.docker_image:
+    name: "{{ default_container_image }}"
+    source: pull
+
+- name: Create default containers
+  community.docker.docker_container:
+    name: "{{ default_container_name }}{{ item }}"
+    image: "{{ default_container_image }}"
+    command: "{{ default_container_command }}"
+    state: present
+  with_sequence: count={{ container_count }}
+
+# - name: Add the line "vm.max_map_count = 262144" inside the file "/etc/sysctl.conf"
+#   ansible.builtin.shell: |
+#     echo 'vm.max_map_count = 262144' >> /etc/sysctl.conf
+
+- name: set vm.max_map_count to 262144 in sysctl (/etc/sysctl.conf)
+  ansible.posix.sysctl: name={{ item.key }} value={{ item.value }}
+  with_items:
+    - {key: "vm.max_map_count", value: "262144"}
+
+- name: Clone ci-cd project
+  ansible.builtin.git:
+    repo: https://{{ git_user | urlencode }}:{{ git_password | urlencode }}@gitlab.com/devsecuritec/ci-cd.git
+    dest: /home/jenkins/ci-cd
+    single_branch: true
+    version: develop
+
+# - name: Pip install docker for Ansible's docker_login and docker_service modules
+#   pip:
+#     name: "docker-compose"
+
+# - name: Run 'docker-compose build/up'
+#   community.docker.docker_compose:
+#     project_src: /home/jenkins/ci-cd # Git repo
+#     state: present
+#   register: output
+
+- name: Run containers
+  become: true
+  shell:
+    cmd: "docker-compose -f docker-compose.yml up -d"
+    chdir: /home/jenkins/ci-cd
+
+- name: Wait until the file initialAdminPassword is present before continuing
+  wait_for:
+    path: /var/jenkins_home/secrets/initialAdminPassword
+
+- name: Read jenkins token
+  ansible.builtin.shell: |
+    cat /var/jenkins_home/secrets/initialAdminPassword
+  register: file_content
+
+- name: Print jenkins token to the console
+  ansible.builtin.debug:
+    msg: "{{ file_content.stdout }}"
+
+# - name: Save token to a '$jenkins_token' variable
+#   ansible.builtin.set_fact:
+#     jenkins_token: "{{ file_content.stdout }}"
+
+# - name: Print the '$jenkins_token' variable
+#   ansible.builtin.debug:
+#     msg: "{{ jenkins_token }}"

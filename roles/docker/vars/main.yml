@@ -1,0 +1,32 @@
+---
+container_count: 3
+default_container_name: docker
+default_container_image: ubuntu
+default_container_command: sleep 1d
+docker_gpg_url: https://download.docker.com/linux/ubuntu/gpg
+# docker_gpg_url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+docker_repo: deb https://download.docker.com/linux/ubuntu focal stable
+#d ocker_repo: deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+docker_required_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+  - gnupg-agent
+  - software-properties-common
+  - python3-pip
+  - virtualenv
+  - python3-setuptools
+  - lsb-release
+docker_packges:
+  # - docker
+  # - docker.io
+  # - docker-compose
+  # - docker-registry
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+admin_user: jenkins
+docker_compose_url: https://github.com/docker/compose/releases/download/1.28.2/docker-compose-Linux-x86_64
+git_user: a.g.securitec
+git_password: glpat-FyDGzjr5mxyLkzC-Z6z2

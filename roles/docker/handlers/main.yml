@@ -1,0 +1,7 @@
+---
+# Useful in case we need to call in the future tasks to restart
+# handlers:
+#   - name: restart docker
+#     service: 
+#       name: docker 
+#       state: restarted

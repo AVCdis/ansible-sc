@@ -1,0 +1,12 @@
+---
+- name: Install Docker
+  hosts: jenkins
+  become: true
+
+  tasks:
+    - name: Clone ci-cd project
+      ansible.builtin.git:
+        repo: https://{{ git_user | urlencode }}:{{ git_password | urlencode }}@gitlab.com/devsecuritec/ci-cd.git
+        dest: /root/ci-cd
+        single_branch: true
+        version: develop

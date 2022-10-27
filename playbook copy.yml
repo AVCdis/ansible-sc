@@ -1,0 +1,110 @@
+---
+- name: Install Docker
+  hosts: jenkins
+  become: true
+  vars:
+    container_count: 4
+    default_container_name: docker
+    default_container_image: ubuntu
+    default_container_command: sleep 1d
+    #docker_gpg_url: https://download.docker.com/linux/ubuntu/gpg
+    docker_gpg_url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+    #docker_repo: deb https://download.docker.com/linux/ubuntu focal stable
+    docker_repo: deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    docker_required_packages: 
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - gnupg-agent
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+      - lsb-release
+    docker_packges:
+      # - docker
+      # - docker.io
+      # - docker-compose
+      # - docker-registry
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    admin_user: jenkins
+    docker_compose_url: https://github.com/docker/compose/releases/download/1.28.2/docker-compose-Linux-x86_64
+
+  tasks:
+    - name: Install aptitude using apt
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages for Docker
+      apt:
+        pkg:
+        name: "{{ docker_required_packages }}"
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt key
+      apt_key:
+        url: "{{ docker_gpg_url }}"
+        #url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: "{{ docker_repo }}"
+        #repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: "{{ docker_packges }}"
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Add adminstrator to docker group
+      user:
+        name: "{{ admin_user }}"
+        groups: docker
+        append: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: "{{ docker_compose_url }}"
+        dest: /usr/local/bin/docker-compose
+        mode: u+x,g+x,o+x
+
+    # - name: Check that Docker was started and enabled
+    #   service:
+    #     name: docker
+    #     state: started
+    #     enabled: yes
+
+# Test docker installation
+
+    - name: Pull default Docker image
+      community.docker.docker_image:
+        name: "{{ default_container_image }}"
+        source: pull
+
+    - name: Create default containers
+      community.docker.docker_container:
+        name: "{{ default_container_name }}{{ item }}"
+        image: "{{ default_container_image }}"
+        command: "{{ default_container_command }}"
+        state: present
+      with_sequence: count={{ container_count }}
+
+  # Useful in case we need to call in the future tasks to restart
+  # handlers:
+  #   - name: restart docker
+  #     service: 
+  #       name: docker 
+  #       state: restarted
